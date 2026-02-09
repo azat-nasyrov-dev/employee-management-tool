@@ -44,7 +44,7 @@ export class EmployeesController {
     description: 'Employee not found',
   })
   @Get(':id')
-  public async findById(@Param('id') id: string): Promise<Employee> {
+  public async findEmployeeById(@Param('id') id: string): Promise<Employee> {
     return await this.employeesService.findEmployeeById(id);
   }
 
