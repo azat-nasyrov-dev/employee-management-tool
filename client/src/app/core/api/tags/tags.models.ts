@@ -1,4 +1,7 @@
-import { TagType } from './tag.type';
+export enum TagType {
+  POSITIVE = 'positive',
+  NEGATIVE = 'negative',
+}
 
 export interface Tag {
   _id: string;

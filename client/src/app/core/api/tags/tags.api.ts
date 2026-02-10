@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tag } from '../models/tag.model';
-import { API_BASE_URL } from './api.config';
-import { CreateTagPayload } from '../models/create-tag.payload';
-import { UpdateTagPayload } from '../models/update-tag.payload';
-import { TagType } from '../models/tag.type';
+import { Tag } from './tags.models';
+import { API_BASE_URL } from '../../configs/api.config';
+import { CreateTagPayload } from './create-tag.payload';
+import { UpdateTagPayload } from './update-tag.payload';
+import { TagType } from '../../models/tag.type';
 
 @Injectable({ providedIn: 'root' })
 export class TagsApi {
