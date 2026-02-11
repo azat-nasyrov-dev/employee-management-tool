@@ -1,4 +1,4 @@
-import { TagType } from './tags.models';
+import { TagType } from './tag-type.enum';
 
 export interface CreateTagPayload {
   type: TagType;

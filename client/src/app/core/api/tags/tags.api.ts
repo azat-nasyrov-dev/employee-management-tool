@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tag } from './tags.models';
 import { API_BASE_URL } from '../../configs/api.config';
-import { CreateTagPayload } from './create-tag.payload';
-import { UpdateTagPayload } from './update-tag.payload';
-import { TagType } from '../../models/tag.type';
+import { Tag } from './tags.models';
+import { CreateTagPayload, UpdateTagPayload } from './tags.payloads';
+import { TagType } from './tag-type.enum';
 
 @Injectable({ providedIn: 'root' })
 export class TagsApi {
@@ -24,7 +23,7 @@ export class TagsApi {
    */
   public findAllTags(type?: TagType): Observable<Tag[]> {
     return this.http.get<Tag[]>(this.baseUrl, {
-      params: type ? { type: `${type}` } : {},
+      params: type ? { type } : {},
     });
   }
 
@@ -45,7 +44,7 @@ export class TagsApi {
   /**
    * DELETE /tags/:id
    */
-  public deleteTagById(id: string): Observable<void> {
+  public removeTagById(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

@@ -1,5 +1,5 @@
 import { Tag } from '../tags/tags.models';
-import { Office } from '../../models/office.enum';
+import { Office } from '../shared/office.enum';
 
 export interface Employee {
   _id: string;

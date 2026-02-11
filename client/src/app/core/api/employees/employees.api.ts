@@ -1,10 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Employee } from './employees.models';
 import { API_BASE_URL } from '../../configs/api.config';
-import { CreateEmployeePayload } from './create-employee.payload';
-import { UpdateEmployeePayload } from './update-employee.payload';
+import { Employee } from './employees.models';
+import { CreateEmployeePayload, UpdateEmployeePayload } from './employees.payloads';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeesApi {
