@@ -21,41 +21,67 @@ import { ConfirmDialogComponent } from '../../shared/dialogs/confirm-dialog.comp
     TagsListComponent,
   ],
   template: `
-    <h1>Tags Management</h1>
+    <div class="page">
 
-    @if (loading()) {
-      <div class="loading">
-        <mat-spinner diameter="40"></mat-spinner>
+      <div class="page-header">
+        <h1>Tags Management</h1>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openCreateDialog()"
+        >
+          Create Tag
+        </button>
       </div>
-    }
 
-    <button mat-raised-button color="primary" (click)="openCreateDialog()">
-      Create Tag
-    </button>
+      @if (loading()) {
+        <div class="loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      }
 
-    <mat-tab-group>
-      <mat-tab label="Positive">
-        <app-tags-list
-          [tags]="positiveTags()"
-          (edit)="openEditDialog($event)"
-          (remove)="removeTag($event)"
-        />
-      </mat-tab>
+      <mat-tab-group>
 
-      <mat-tab label="Negative">
-        <app-tags-list
-          [tags]="negativeTags()"
-          (edit)="openEditDialog($event)"
-          (remove)="removeTag($event)"
-        />
-      </mat-tab>
-    </mat-tab-group>
+        <mat-tab label="Positive">
+          <app-tags-list
+            [tags]="positiveTags()"
+            (edit)="openEditDialog($event)"
+            (remove)="removeTag($event)"
+          />
+        </mat-tab>
+
+        <mat-tab label="Negative">
+          <app-tags-list
+            [tags]="negativeTags()"
+            (edit)="openEditDialog($event)"
+            (remove)="removeTag($event)"
+          />
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
   `,
   styles: [`
+    .page {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .loading {
       display: flex;
       justify-content: center;
-      margin: 20px 0;
+      padding: 32px 0;
     }
   `],
 })
@@ -100,7 +126,9 @@ export class TagsPageComponent {
   }
 
   public openCreateDialog(): void {
-    const ref = this.dialog.open(TagDialogComponent);
+    const ref = this.dialog.open(TagDialogComponent, {
+      width: '420px',
+    });
 
     ref.afterClosed().subscribe(result => {
       if (result) this.loadTags();
@@ -109,6 +137,7 @@ export class TagsPageComponent {
 
   public openEditDialog(tag: Tag): void {
     const ref = this.dialog.open(TagDialogComponent, {
+      width: '420px',
       data: tag,
     });
 
