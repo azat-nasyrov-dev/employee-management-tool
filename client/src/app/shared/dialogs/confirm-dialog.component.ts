@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
     <h2 mat-dialog-title>Confirm</h2>
 
     <mat-dialog-content>
-      {{ data?.message || 'Are you sure?' }}
+      {{ data.message || 'Are you sure?' }}
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
