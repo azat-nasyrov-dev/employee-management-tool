@@ -91,9 +91,9 @@ export class TagsPageComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   private readonly tags = signal<Tag[]>([]);
-  readonly positiveTags = signal<Tag[]>([]);
-  readonly negativeTags = signal<Tag[]>([]);
-  readonly loading = signal(false);
+  public readonly positiveTags = signal<Tag[]>([]);
+  public readonly negativeTags = signal<Tag[]>([]);
+  public readonly loading = signal(false);
 
   constructor() {
     this.loadTags();
