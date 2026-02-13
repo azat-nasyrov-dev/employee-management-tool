@@ -20,70 +20,8 @@ import { ConfirmDialogComponent } from '../../shared/dialogs/confirm-dialog.comp
     MatProgressSpinnerModule,
     TagsListComponent,
   ],
-  template: `
-    <div class="page">
-
-      <div class="page-header">
-        <h1>Tags Management</h1>
-
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="openCreateDialog()"
-        >
-          Create Tag
-        </button>
-      </div>
-
-      @if (loading()) {
-        <div class="loading">
-          <mat-spinner diameter="40"></mat-spinner>
-        </div>
-      }
-
-      <mat-tab-group>
-
-        <mat-tab label="Positive">
-          <app-tags-list
-            [tags]="positiveTags()"
-            (edit)="openEditDialog($event)"
-            (remove)="removeTag($event)"
-          />
-        </mat-tab>
-
-        <mat-tab label="Negative">
-          <app-tags-list
-            [tags]="negativeTags()"
-            (edit)="openEditDialog($event)"
-            (remove)="removeTag($event)"
-          />
-        </mat-tab>
-
-      </mat-tab-group>
-
-    </div>
-  `,
-  styles: [`
-    .page {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .loading {
-      display: flex;
-      justify-content: center;
-      padding: 32px 0;
-    }
-  `],
+  templateUrl: './tags-page.component.html',
+  styleUrls: ['./tags-page.component.scss'],
 })
 export class TagsPageComponent {
   private readonly tagsApi = inject(TagsApi);

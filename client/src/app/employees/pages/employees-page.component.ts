@@ -16,55 +16,8 @@ import { ConfirmDialogComponent } from '../../shared/dialogs/confirm-dialog.comp
     MatProgressSpinnerModule,
     EmployeesListComponent,
   ],
-  template: `
-    <div class="page">
-
-      <div class="page-header">
-        <h1>Employees Management</h1>
-
-        <button
-            mat-raised-button
-            color="primary"
-            (click)="openCreateDialog()"
-        >
-          Create Employee
-        </button>
-      </div>
-
-      @if (loading()) {
-        <div class="loading">
-          <mat-spinner diameter="40"></mat-spinner>
-        </div>
-      }
-
-      <app-employees-list
-        [employees]="employees()"
-        (edit)="openEditDialog($event)"
-        (remove)="removeEmployee($event)"
-      />
-    </div>
-  `,
-  styles: [`
-    .page {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .loading {
-      display: flex;
-      justify-content: center;
-      margin: 32px 0;
-    }
-  `],
+  templateUrl: './employees-page.component.html',
+  styleUrls: ['./employees-page.component.scss'],
 })
 export class EmployeesPageComponent {
   private readonly employeesApi = inject(EmployeesApi);

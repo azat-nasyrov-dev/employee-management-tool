@@ -1,0 +1,41 @@
+<div class="page">
+
+  <div class="page-header">
+    <h1>Tags Management</h1>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openCreateDialog()"
+    >
+      Create Tag
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  <mat-tab-group>
+
+    <mat-tab label="Positive">
+      <app-tags-list
+        [tags]="positiveTags()"
+        (edit)="openEditDialog($event)"
+        (remove)="removeTag($event)"
+      />
+    </mat-tab>
+
+    <mat-tab label="Negative">
+      <app-tags-list
+        [tags]="negativeTags()"
+        (edit)="openEditDialog($event)"
+        (remove)="removeTag($event)"
+      />
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>

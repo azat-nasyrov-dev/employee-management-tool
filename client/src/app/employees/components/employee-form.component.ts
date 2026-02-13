@@ -22,66 +22,8 @@ import { Tag } from '../../core/api/tags/tags.models';
     MatNativeDateModule,
     MatChipsModule,
   ],
-  template: `
-    <form [formGroup]="form" class="form">
-      <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
-        <input matInput formControlName="firstName" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
-        <input matInput formControlName="lastName" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Office</mat-label>
-        <mat-select formControlName="office">
-          @for (office of offices; track office) {
-            <mat-option [value]="office">
-              {{ office }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Date of Birth</mat-label>
-        <input
-            matInput
-            [matDatepicker]="picker"
-            formControlName="dateOfBirth"
-        />
-        <mat-datepicker-toggle matSuffix [for]="picker" />
-        <mat-datepicker #picker />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phoneNumber" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Tags</mat-label>
-        <mat-select formControlName="tags" multiple>
-          @for (tag of availableTags; track tag._id) {
-            <mat-option [value]="tag._id">
-              {{ tag.name }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-    </form>
-  `,
-  styles: [`
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 12px;
-    }
-  `],
+  templateUrl: './employee-form.component.html',
+  styleUrls: ['./employee-form.component.scss'],
 })
 export class EmployeeFormComponent {
   private readonly formBuilder = inject(FormBuilder);

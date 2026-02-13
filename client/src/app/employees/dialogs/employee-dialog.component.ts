@@ -17,32 +17,7 @@ import { EmployeeFormComponent } from '../components/employee-form.component';
     MatButtonModule,
     EmployeeFormComponent,
   ],
-  template: `
-    <h2 mat-dialog-title>
-      {{ isEditMode ? 'Edit Employee' : 'Create Employee' }}
-    </h2>
-
-    <mat-dialog-content>
-      <app-employee-form
-        [employee]="data ?? null"
-        [tags]="tags()"
-        #formComp
-      />
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="close()">Cancel</button>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="save(formComp)"
-        [disabled]="!formComp.valid || loading()"
-      >
-        {{ loading() ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
+  templateUrl: './employee-dialog.component.html',
 })
 export class EmployeeDialogComponent {
   private readonly employeesApi = inject(EmployeesApi);

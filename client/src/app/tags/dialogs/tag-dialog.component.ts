@@ -15,28 +15,7 @@ import { TagFormComponent } from '../components/tag-form.component';
     MatButtonModule,
     TagFormComponent,
   ],
-  template: `
-    <h2 mat-dialog-title>
-      {{ isEditMode ? 'Edit Tag' : 'Create Tag' }}
-    </h2>
-
-    <mat-dialog-content>
-      <app-tag-form [tag]="data ?? null" #formComp />
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="close()">Cancel</button>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="save(formComp)"
-        [disabled]="!formComp.valid || loading"
-      >
-        {{ loading ? 'Saving...' : 'Save' }}
-      </button>
-    </mat-dialog-actions>
-  `,
+  templateUrl: './tag-dialog.component.html',
 })
 export class TagDialogComponent {
   private readonly tagsApi = inject(TagsApi);

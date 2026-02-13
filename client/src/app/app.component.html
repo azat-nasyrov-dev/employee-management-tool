@@ -1,11 +1,30 @@
-<mat-toolbar color="primary">
-  <span>Employee Management Tool</span>
-  <span class="spacer"></span>
+<mat-toolbar color="primary" class="toolbar">
 
-  <a mat-button routerLink="/employees">Employees</a>
-  <a mat-button routerLink="/tags">Tags</a>
+  <div class="logo">
+    Employee Management Tool
+  </div>
+
+  <div class="nav-links">
+    <a
+      mat-button
+      routerLink="/tags"
+      routerLinkActive="active-link"
+    >
+      Tags
+    </a>
+
+    <a
+      mat-button
+      routerLink="/employees"
+      routerLinkActive="active-link"
+    >
+      Employees
+    </a>
+
+  </div>
+
 </mat-toolbar>
 
-<main class="app-content">
+<div class="container">
   <router-outlet />
-</main>
+</div>

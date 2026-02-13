@@ -17,34 +17,7 @@ import { Tag } from '../../core/api/tags/tags.models';
     MatSelectModule,
     MatButtonModule,
   ],
-  template: `
-    <form [formGroup]="form">
-
-      <mat-form-field appearance="outline">
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="type">
-          <mat-option [value]="TagType.POSITIVE">Positive</mat-option>
-          <mat-option [value]="TagType.NEGATIVE">Negative</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>External ID</mat-label>
-        <input matInput formControlName="externalId" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Color</mat-label>
-        <input matInput type="color" formControlName="color" />
-      </mat-form-field>
-
-    </form>
-  `,
+  templateUrl: './tag-form.component.html',
 })
 export class TagFormComponent {
   private readonly formBuilder = inject(FormBuilder);

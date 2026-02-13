@@ -1,0 +1,66 @@
+@if (!employees.length) {
+  <div class="empty-state">
+    No employees created yet.
+  </div>
+} @else {
+
+  @for (employee of employees; track employee._id) {
+    <mat-card class="card mat-elevation-z2">
+
+      <div class="card-header">
+        <h2>
+          {{ employee.firstName }} {{ employee.lastName }}
+        </h2>
+
+        <div class="actions">
+          <button mat-icon-button color="primary" (click)="edit.emit(employee)">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button mat-icon-button color="warn" (click)="remove.emit(employee)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-block">
+          <div class="label">Office</div>
+          <div class="value">{{ employee.office }}</div>
+        </div>
+
+        <div class="info-block">
+          <div class="label">Date of Birth</div>
+          <div class="value">
+            {{ employee.dateOfBirth | date:'mediumDate' }}
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="label">Phone</div>
+          <div class="value">{{ employee.phoneNumber }}</div>
+        </div>
+
+      </div>
+
+      @if (employee.tags.length) {
+        <div class="tags-section">
+          <div class="label">Tags</div>
+
+          <div class="tags">
+            @for (tag of employee.tags; track tag._id) {
+              <mat-chip
+                class="tag-chip"
+                [style.background]="tag.color"
+              >
+                {{ tag.name }}
+              </mat-chip>
+            }
+          </div>
+        </div>
+      }
+
+    </mat-card>
+  }
+}

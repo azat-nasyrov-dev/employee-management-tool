@@ -1,0 +1,26 @@
+<div class="page">
+
+  <div class="page-header">
+    <h1>Employees Management</h1>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openCreateDialog()"
+    >
+      Create Employee
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  <app-employees-list
+    [employees]="employees()"
+    (edit)="openEditDialog($event)"
+    (remove)="removeEmployee($event)"
+  />
+</div>
