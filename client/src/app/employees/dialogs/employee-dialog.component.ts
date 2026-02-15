@@ -1,6 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Employee } from '../../core/api/employees/employees.models';
@@ -23,17 +25,18 @@ export class EmployeeDialogComponent {
   private readonly employeesApi = inject(EmployeesApi);
   private readonly tagsApi = inject(TagsApi);
   private readonly dialogRef = inject(MatDialogRef<EmployeeDialogComponent>);
-  public readonly data = inject<Employee | null>(MAT_DIALOG_DATA, { optional: true });
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
+  public readonly data = inject<Employee | null>(MAT_DIALOG_DATA, { optional: true });
 
   public loading = signal(false);
   public readonly tags = signal<Tag[]>([]);
 
   constructor() {
-    this.tagsApi.findAllTags().subscribe(tags => {
-      this.tags.set(tags);
-    });
+    this.tagsApi.findAllTags().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(tags => this.tags.set(tags));
   }
 
   public get isEditMode(): boolean {
@@ -53,14 +56,15 @@ export class EmployeeDialogComponent {
       ? this.employeesApi.updateEmployeeById(this.data!._id, form.value)
       : this.employeesApi.createEmployee(form.value);
 
-    request$.subscribe({
+    request$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: () => {
         this.snackBar.open(
           this.isEditMode ? 'Employee updated' : 'Employee created',
           'Close',
-          { duration: 3000 },
+          { duration: 3000 }
         );
-
         this.dialogRef.close(true);
       },
       error: () => this.loading.set(false),

@@ -18,6 +18,7 @@ import { Tag } from '../../core/api/tags/tags.models';
     MatButtonModule,
   ],
   templateUrl: './tag-form.component.html',
+  styleUrls: ['./tag-form.component.scss'],
 })
 export class TagFormComponent {
   private readonly formBuilder = inject(FormBuilder);
@@ -34,9 +35,9 @@ export class TagFormComponent {
     });
   }
 
-  public TagType = TagType;
+  public readonly TagType = TagType;
 
-  public form = this.formBuilder.nonNullable.group({
+  public readonly form = this.formBuilder.nonNullable.group({
     type: this.formBuilder.nonNullable.control<TagType>(
       TagType.POSITIVE,
       { validators: [Validators.required] }

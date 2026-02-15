@@ -7,7 +7,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { Employee } from '../../core/api/employees/employees.models';
-import  {Office } from '../../core/api/shared/office.enum';
+import { Office } from '../../core/api/shared/office.enum';
 import { Tag } from '../../core/api/tags/tags.models';
 
 @Component({

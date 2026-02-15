@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmployeesApi } from '../../core/api/employees/employees.api';
@@ -13,6 +14,7 @@ import { ConfirmDialogComponent } from '../../shared/dialogs/confirm-dialog.comp
   standalone: true,
   imports: [
     MatButtonModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     EmployeesListComponent,
   ],
@@ -23,6 +25,7 @@ export class EmployeesPageComponent {
   private readonly employeesApi = inject(EmployeesApi);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
   public readonly employees = signal<Employee[]>([]);
   public readonly loading = signal(false);
@@ -34,23 +37,23 @@ export class EmployeesPageComponent {
   public loadEmployees(): void {
     this.loading.set(true);
 
-    this.employeesApi.findAllEmployees().subscribe({
+    this.employeesApi.findAllEmployees().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: employees => {
         this.employees.set(employees);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      },
+      error: () => this.loading.set(false),
     });
   }
 
   public openCreateDialog(): void {
-    const ref = this.dialog.open(EmployeeDialogComponent, {
-      width: '600px',
-    });
+    const ref = this.dialog.open(EmployeeDialogComponent, { width: '600px' });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result) this.loadEmployees();
     });
   }
@@ -61,7 +64,9 @@ export class EmployeesPageComponent {
       data: employee,
     });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result) this.loadEmployees();
     });
   }
@@ -71,10 +76,14 @@ export class EmployeesPageComponent {
       data: { message: `Delete ${employee.firstName} ${employee.lastName}?` },
     });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (!result) return;
 
-      this.employeesApi.removeEmployeeById(employee._id).subscribe(() => {
+      this.employeesApi.removeEmployeeById(employee._id).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => {
         this.snackBar.open('Employee deleted', 'Close', { duration: 3000 });
         this.loadEmployees();
       });

@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,6 +23,7 @@ export class TagDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<TagDialogComponent>);
   public readonly data = inject<Tag | null>(MAT_DIALOG_DATA, { optional: true });
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
   public loading = false;
 
@@ -42,19 +44,18 @@ export class TagDialogComponent {
       ? this.tagsApi.updateTagById(this.data!._id, formComp.value)
       : this.tagsApi.createTag(formComp.value);
 
-    request$.subscribe({
+    request$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: () => {
         this.snackBar.open(
           this.isEditMode ? 'Tag updated' : 'Tag created',
-          'close',
-          { duration: 3000 },
+          'Close',
+          { duration: 3000 }
         );
-
         this.dialogRef.close(true);
       },
-      error: () => {
-        this.loading = false;
-      },
+      error: () => this.loading = false,
     });
   }
 }

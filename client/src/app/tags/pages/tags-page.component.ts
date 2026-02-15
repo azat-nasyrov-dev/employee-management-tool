@@ -1,4 +1,6 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -27,50 +29,42 @@ export class TagsPageComponent {
   private readonly tagsApi = inject(TagsApi);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly tags = signal<Tag[]>([]);
   public readonly positiveTags = signal<Tag[]>([]);
   public readonly negativeTags = signal<Tag[]>([]);
   public readonly loading = signal(false);
 
   constructor() {
     this.loadTags();
-
-    effect(() => {
-      const all = this.tags();
-
-      this.positiveTags.set(
-        all.filter(t => t.type === TagType.POSITIVE)
-      );
-
-      this.negativeTags.set(
-        all.filter(t => t.type === TagType.NEGATIVE)
-      );
-    });
   }
 
   public loadTags(): void {
     this.loading.set(true);
 
-    this.tagsApi.findAllTags().subscribe({
-      next: tags => {
-        this.tags.set(tags);
+    forkJoin({
+      positive: this.tagsApi.findAllTags(TagType.POSITIVE),
+      negative: this.tagsApi.findAllTags(TagType.NEGATIVE),
+    }).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: ({ positive, negative }) => {
+        this.positiveTags.set(positive);
+        this.negativeTags.set(negative);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      },
+      error: () => this.loading.set(false),
     });
   }
 
   public openCreateDialog(): void {
-    const ref = this.dialog.open(TagDialogComponent, {
-      width: '420px',
-    });
+    const ref = this.dialog.open(TagDialogComponent, { width: '420px' });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result) this.loadTags();
-    })
+    });
   }
 
   public openEditDialog(tag: Tag): void {
@@ -79,7 +73,9 @@ export class TagsPageComponent {
       data: tag,
     });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result) this.loadTags();
     });
   }
@@ -89,10 +85,14 @@ export class TagsPageComponent {
       data: { message: `Delete tag "${tag.name}"?` },
     });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (!result) return;
 
-      this.tagsApi.removeTagById(tag._id).subscribe(() => {
+      this.tagsApi.removeTagById(tag._id).pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => {
         this.snackBar.open('Tag deleted', 'Close', { duration: 3000 });
         this.loadTags();
       });
